@@ -660,15 +660,43 @@ public class ExpedicionAMarte {
 
     public static void main(String[] args) {
         Scanner entrada = new Scanner(System.in);
+        char continuar;
 
         // Mostramos el logo y el mensaje de bienvenida al iniciar la aplicación
         limpiarConsola();
         mostrarLogo();
         mostrarMensajeBienvenida();
-        pausar(entrada);
 
-        // Ejecutamos el menú principal
-        menuPrincipal(entrada);
+        System.out.print("\nHola Explorador, ¿desea continuar? (s/n): ");
+        continuar = entrada.next().charAt(0);
+        entrada.nextLine(); // Consumimos el salto de línea pendiente
+
+        // Ejecutamos el menú principal únicamente si el usuario desea continuar
+        if (continuar == 's' || continuar == 'S') {
+            menuPrincipal(entrada);
+        } else if (continuar == 'n' || continuar == 'N') {
+            System.out.print("\n*************************************************************\n");
+            System.out.print("| Saliendo del sistema ODISSEY...                           |\n");
+            System.out.print("*************************************************************\n\n");
+            pausar(entrada);
+
+            // Mostramos el mensaje de salida al finalizar la aplicación
+            limpiarConsola();
+            mostrarLogo();
+            mostrarMensajeSalida();
+            pausar(entrada);
+        } else {
+            System.out.print("\n*************************************************************\n");
+            System.out.print("| Entrada inválida. Saliendo del sistema ODISSEY...         |\n");
+            System.out.print("*************************************************************\n\n");
+            pausar(entrada);
+
+            // Mostramos el mensaje de salida al finalizar la aplicación
+            limpiarConsola();
+            mostrarLogo();
+            mostrarMensajeSalida();
+            pausar(entrada);
+        }
 
         // Cerramos el Scanner para liberar recursos
         entrada.close();
