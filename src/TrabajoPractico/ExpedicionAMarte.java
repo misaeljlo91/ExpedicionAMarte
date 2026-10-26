@@ -67,7 +67,6 @@ public class ExpedicionAMarte {
 
     // Método que muestra y gestiona el menú principal
     public static void menuPrincipal(Scanner entrada) {
-
         int opcion = 0;
         int intentosIncorrectos = 0;
 
@@ -89,7 +88,7 @@ public class ExpedicionAMarte {
             System.out.print("*************************************************************\n");
             System.out.print("Ingrese una opción: ");
 
-            // Validamos que el usuario ingrese un número entero
+            // Validamos que el usuario ingrese un número válido positivo entero
             if (entrada.hasNextInt()) {
                 opcion = entrada.nextInt();
                 entrada.nextLine();
@@ -97,7 +96,7 @@ public class ExpedicionAMarte {
                 if(opcion < 1 || opcion > 5) {
                     intentosIncorrectos++;
                     limpiarConsola();
-                    System.out.println("\nOpción inválida. Por favor, ingrese un número del 1 al 5.");
+                    System.out.println("\nOpción inválida. Por favor, ingrese un número válido positivo del 1 al 5.");
                     System.out.println("Te quedan " + (3 - intentosIncorrectos) + " intentos. Después de 3 intentos incorrectos, el sistema se cerrará.");
 
                     if(intentosIncorrectos < 3) {
@@ -108,7 +107,7 @@ public class ExpedicionAMarte {
                 entrada.nextLine();
                 intentosIncorrectos++;
                 limpiarConsola();
-                System.out.println("\nOpción inválida. Por favor, ingrese un número del 1 al 5.");
+                System.out.println("\nOpción inválida. Por favor, ingrese un número válido positivo del 1 al 5.");
                 System.out.println("Te quedan " + (3 - intentosIncorrectos) + " intentos. Después de 3 intentos incorrectos, el sistema se cerrará.");
 
                 if(intentosIncorrectos < 3) {
@@ -134,7 +133,7 @@ public class ExpedicionAMarte {
                         System.out.print("*************************************************************\n");
                         System.out.print("| 1. Estado de SoVYNE (Soporte Vital y Nivel de Emergencia) |\n");
                         System.out.print("*************************************************************\n");
-                        mostrarEstadoSoVYNE(entrada);
+                        ejecutarSistemaSoVYNE(entrada);
                         break;
 
                     case 2:
@@ -168,7 +167,7 @@ public class ExpedicionAMarte {
 
                     default:
                         limpiarConsola();
-                        System.out.println("\nOpción inválida. Por favor, ingrese un número del 1 al 5.");
+                        System.out.println("\nOpción inválida. Por favor, ingrese un número válido positivo del 1 al 5.");
                         pausar(entrada);
                         break;
                 }
@@ -179,7 +178,6 @@ public class ExpedicionAMarte {
 
     // Método que muestra y gestiona el submenú de ProDeLB
     public static void submenuProDeLB(Scanner entrada) {
-
         char subOpcion = ' ';
 
         limpiarConsola();
@@ -269,9 +267,99 @@ public class ExpedicionAMarte {
 
     // Inicio Estado de SoVYNE (Soporte Vital y Nivel de Emergencia)
     // Metodo para mostrar el estado de SoVYNE
-    public static void mostrarEstadoSoVYNE(Scanner entrada) {
-        System.out.print("\nDesarrollando la funcionalidad de Estado de SoVYNE...\n");
+    public static void ejecutarSistemaSoVYNE(Scanner entrada) {
+        char continuar;
+        do {
+            mostrarEstadoSoVYNE(entrada);
+
+            System.out.print("\n¿Desea realizar otra lectura de SoVYNE? (s/n): ");
+            continuar = entrada.next().toLowerCase().charAt(0);
+            entrada.nextLine(); // Consumimos el salto de línea pendiente
+
+        } while (continuar == 's');
+
+        System.out.print("\n*************************************************************\n");
+        System.out.print("| Saliendo del sistema SoVYNE...                            |\n");
+        System.out.print("*************************************************************\n\n");
         pausar(entrada);
+    }
+
+    // Método para mostrar el estado de SoVYNE
+    public static void mostrarEstadoSoVYNE(Scanner entrada) {
+        double oxigeno = validarOxigeno(entrada);
+        double agua = validarAgua(entrada);
+        double energia = validarEnergia(entrada);
+
+        System.out.println("\n*************************************************************");
+        System.out.println("|-------------------- REPORTE DE SoVYNE --------------------|");
+
+        if (oxigeno < 20.0 || energia < 15.0) {
+            System.out.println("*************************************************************");
+            System.out.println("| ALERTA CRÍTICA: Priorizar soporte de vida                 |");
+            System.out.println("*************************************************************");
+        } else if (agua < 50.0) {
+            System.out.println("*************************************************************");
+            System.out.println("| PRECAUCIÓN: Racionamiento hídrico activado                |");
+            System.out.println("*************************************************************");
+        } else {
+            System.out.println("*************************************************************");
+            System.out.println("| CONDICIÓN ÓPTIMA: Hábitat presurizado y estable           |");
+            System.out.println("*************************************************************");
+        }
+    }
+
+    // Método para validar el nivel de oxígeno ingresado por el usuario
+    public static double validarOxigeno(Scanner entrada) {
+        double oxigeno = -1.0;
+        while (oxigeno < 0.0 || oxigeno > 100.0) {
+            System.out.print("\nIngrese el nivel actual de Oxígeno (0 a 100%): ");
+            if (entrada.hasNextDouble()) {
+                oxigeno = entrada.nextDouble();
+                if (oxigeno < 0.0 || oxigeno > 100.0) {
+                    System.out.println("Error: El valor de oxígeno debe estar entre 0 y 100.\n");
+                }
+            } else {
+                System.out.print("Entrada inválida. Por favor, ingrese un número válido positivo.\n");
+                entrada.next();
+            }
+        }
+        return oxigeno;
+    }
+
+    // Método para validar el nivel de agua ingresado por el usuario
+    public static double validarAgua(Scanner entrada) {
+        double agua = -1.0;
+        while (agua < 0.0) {
+            System.out.print("Ingrese el nivel de agua en litros: ");
+            if (entrada.hasNextDouble()) {
+                agua = entrada.nextDouble();
+                if (agua < 0.0) {
+                    System.out.println("Error: La cantidad de agua ingresada no puede ser negativa.\n");
+                }
+            } else {
+                System.out.println("Entrada inválida. Por favor, ingrese un número válido positivo.\n");
+                entrada.next();
+            }
+        }
+        return agua;
+    }
+
+    // Método para validar el nivel de energía ingresado por el usuario
+    public static double validarEnergia(Scanner entrada) {
+        double energia = -1.0;
+        while (energia < 0.0 || energia > 200.0) {
+            System.out.print("Ingrese el nivel de energía el kWh: ");
+            if (entrada.hasNextDouble()) {
+                energia = entrada.nextDouble();
+                if (energia < 0.0 || energia > 200.0) {
+                    System.out.println("Error: El nivel de energía no puede ser negativo.\n");
+                }
+            } else {
+                System.out.println("Entrada inválida. Por favor, ingrese un número válido positivo.\n");
+                entrada.next();
+            }
+        }
+        return energia;
     }
     // Fin Estado de SoVYNE (Soporte Vital y Nivel de Emergencia)
 
@@ -338,7 +426,7 @@ public class ExpedicionAMarte {
                 }
             } else {
                 entrada.nextLine();
-                System.out.print("Entrada inválida. Por favor, ingrese un número.\n");
+                System.out.print("Entrada inválida. Por favor, ingrese un número válido positivo.\n");
             }
         } while (distanciaObjetivo <= 0 || distanciaObjetivo > 20);
 
@@ -358,7 +446,7 @@ public class ExpedicionAMarte {
                 }
             } else {
                 entrada.nextLine();
-                System.out.println("Entrada inválida. Por favor, ingrese un número entero.\n");
+                System.out.println("Entrada inválida. Por favor, ingrese un número válido positivo entero.\n");
             }
         } while (totalSoles <= 0 || totalSoles > 6);
 
@@ -467,7 +555,7 @@ public class ExpedicionAMarte {
         do {
             System.out.print("\nIngrese la cantidad de muestras a evaluar: ");
 
-            //Verificamos que el usuario ingrese un numero entero
+            //Verificamos que el usuario ingrese un número entero
             if (entrada.hasNextInt()) {
                 cantidadMuestras = entrada.nextInt();
                 entrada.nextLine();
@@ -478,7 +566,7 @@ public class ExpedicionAMarte {
                 }
             } else {
                 entrada.nextLine();
-                System.out.print("Entrada inválida. Por favor, ingrese un número entero.\n");
+                System.out.print("Entrada inválida. Por favor, ingrese un número válido positivo entero.\n");
             }
         } while (cantidadMuestras <= 0);
 
@@ -501,7 +589,7 @@ public class ExpedicionAMarte {
                     }
                 } else {
                     entrada.nextLine();
-                    System.out.print("Entrada inválida. Por favor, ingrese un número entero.\n");
+                    System.out.print("Entrada inválida. Por favor, ingrese un número válido positivo entero.\n");
                 }
             } while (porcentajeHierro < 0 || porcentajeHierro > 100);
 
