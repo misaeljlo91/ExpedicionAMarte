@@ -367,15 +367,92 @@ public class ExpedicionAMarte {
     // Inicio Gestión de Invernadero Hidropónico
     // Método para gestionar el invernadero hidropónico
     public static void gestionarInvernaderoHidroponico(Scanner entrada) {
-        System.out.print("\nDesarrollando la funcionalidad de Gestión de Invernadero Hidropónico...\n");
+        int horasLuz = 0;
+
+        // Pedimos las horas de ciclo lumínico hasta que sea un valor válido
+        do {
+            System.out.print("\nIngrese las horas de ciclo lumínico activo (1 a 24): ");
+
+            if (entrada.hasNextInt()) {
+                horasLuz = entrada.nextInt();
+                entrada.nextLine();
+
+                if (horasLuz < 1 || horasLuz > 24) {
+                    System.out.print("Error: Las horas deben estar entre 1 y 24.\n");
+                }
+            } else {
+                entrada.nextLine();
+                System.out.print("Entrada inválida. Por favor, ingrese un número válido positivo entero.\n");
+            }
+        } while (horasLuz < 1 || horasLuz > 24);
+
+        // Calculamos el impacto en los suministros
+        double aguaConsumida = calcularAguaInvernadero(horasLuz);
+        double energiaConsumida = calcularEnergiaInvernadero(horasLuz);
+
+        // Mostramos el procedimiento técnico
+        System.out.print("\n*************************************************************\n");
+        System.out.print("Procedimiento técnico:\n");
+        System.out.print("  1. Activar lámparas LED de espectro completo en sectores hidropónicos A y B.\n");
+        System.out.print("  2. Abrir válvulas de recirculación de solución nutriente enriquecida con nitrógeno marciano.\n");
+        System.out.print("  3. Acoplar los absorbedores de CO2 al circuito vegetal para forzar la fotosíntesis.\n");
+
+        // Mostramos el balance neto
+        System.out.print("\nBalance neto:\n");
+        System.out.printf("  Agua gastada: %.2f L\n", aguaConsumida);
+        System.out.printf("  Energía restada: %.2f kWh\n", energiaConsumida);
+        System.out.println("*************************************************************\n");
         pausar(entrada);
+    }
+
+    // Método que calcula el agua consumida por el invernadero
+    public static double calcularAguaInvernadero(int horas) {
+        double agua = horas * 3.5;
+        return agua;
+    }
+
+    // Método que calcula la energía consumida por el invernadero
+    public static double calcularEnergiaInvernadero(int horas) {
+        double energia = horas * 12.0;
+        return energia;
     }
     // Fin Gestión de Invernadero Hidropónico
 
     // Inicio Gestión de Carga de Baterías Solares
     // Método para gestionar la carga de baterías solares
     public static void gestionarCargaBateriasSolares(Scanner entrada) {
-        System.out.print("\nDesarrollando la funcionalidad de Gestión de Carga de Baterías Solares...\n");
+        double radiacion = 0.0;
+
+        // Pedimos el nivel de radiación solar hasta que este dentro del rango
+        do {
+            System.out.print("\nIngrese el nivel de radiación solar en W/m2 (100.0 a 700.0): ");
+
+            if (entrada.hasNextDouble()) {
+                radiacion = entrada.nextDouble();
+                entrada.nextLine();
+
+                if (radiacion < 100.0 || radiacion > 700.0) {
+                    System.out.print("Error: La radiación debe estar entre 100.0 y 700.0 W/m2.\n");
+                }
+            } else {
+                entrada.nextLine();
+                System.out.print("Entrada inválida. Por favor, ingrese un número válido positivo.\n");
+            }
+        } while (radiacion < 100.0 || radiacion > 700.0);
+
+        // Calculamos la energía producida (superficie 50 m2 y eficiencia del 22%)
+        double energiaProducida = (radiacion * 50 * 0.22) / 1000;
+
+        // Mostramos el procedimiento técnico
+        System.out.print("\n*************************************************************\n");
+        System.out.print("Procedimiento técnico:\n");
+        System.out.print("  1. Desplegar los servomotores azimutales del arreglo de paneles solares fotovoltaicos.\n");
+        System.out.print("  2. Calibrar ángulo de inclinación según la declinación solar local del cráter Jezero.\n");
+        System.out.print("  3. Derivar la corriente generada a los bancos de almacenamiento de iones de litio.\n");
+
+        // Mostramos la energía inyectada
+        System.out.printf("\nEnergía total inyectada a la red del hábitat: %.2f kWh\n", energiaProducida);
+        System.out.println("*************************************************************\n");
         pausar(entrada);
     }
     // Fin Gestión de Carga de Baterías Solares
@@ -383,15 +460,88 @@ public class ExpedicionAMarte {
     // Inicio Gestión de Blindaje contra Tormenta de Polvo
     // Método para gestionar el blindaje contra tormenta de polvo
     public static void gestionarBlindajeTormentaPolvo(Scanner entrada) {
-        System.out.print("\nDesarrollando la funcionalidad de Gestión de Blindaje contra Tormenta de Polvo...\n");
+        double velocidadViento = 0.0;
+
+        // Pedimos la velocidad del viento hasta que sea valida
+        do {
+            System.out.print("\nIngrese la velocidad estimada del viento en km/h (40.0 a 250.0): ");
+
+            if (entrada.hasNextDouble()) {
+                velocidadViento = entrada.nextDouble();
+                entrada.nextLine();
+
+                if (velocidadViento < 40.0 || velocidadViento > 250.0) {
+                    System.out.print("Error: La velocidad debe estar entre 40.0 y 250.0 km/h.\n");
+                }
+            } else {
+                entrada.nextLine();
+                System.out.print("Entrada inválida. Por favor, ingrese un número válido positivo.\n");
+            }
+        } while (velocidadViento < 40.0 || velocidadViento > 250.0);
+
+        // Calculamos la energia de emergencia
+        double energiaConsumida = calcularEnergiaBlindaje(velocidadViento);
+
+        // Mostramos el procedimiento técnico
+        System.out.print("\n*************************************************************\n");
+        System.out.print("Procedimiento técnico:\n");
+        System.out.print("  1. Bajar compuertas de aleación de titanio sobre las cúpulas de visualización.\n");
+        System.out.print("  2. Presurizar los sellos perimetrales de las esclusas para impedir la infiltración de regolito fino.\n");
+        System.out.print("  3. Retraer mástiles meteorológicos secundarios y antenas de comunicaciones redundantes.\n");
+
+        // Mostramos el costo energetico
+        System.out.printf("\nCosto energético del despliegue defensivo: %.2f kWh\n", energiaConsumida);
+        System.out.println("*************************************************************\n");
         pausar(entrada);
+    }
+
+    // Método que calcula la energía de emergencia del blindaje
+    public static double calcularEnergiaBlindaje(double velocidad) {
+        double energia = 30.0 + (velocidad * 0.45);
+        return energia;
     }
     // Fin Gestión de Blindaje contra Tormenta de Polvo
 
     // Inicio Gestión de Modo Reposo
     // Método para gestionar el modo reposo
     public static void gestionarModoReposo(Scanner entrada) {
-        System.out.print("\nDesarrollando la funcionalidad de Gestión de Modo Reposo...\n");
+        int horasReposo = 0;
+
+        // Pedimos las horas de reposo hasta que sea un valor válido
+        do {
+            System.out.print("\nIngrese las horas de reposo programadas (1 a 48): ");
+
+            if (entrada.hasNextInt()) {
+                horasReposo = entrada.nextInt();
+                entrada.nextLine();
+
+                if (horasReposo < 1 || horasReposo > 48) {
+                    System.out.print("Error: Las horas deben estar entre 1 y 48.\n");
+                }
+            } else {
+                entrada.nextLine();
+                System.out.print("Entrada inválida. Por favor, ingrese un número válido positivo entero.\n");
+            }
+        } while (horasReposo < 1 || horasReposo > 48);
+
+        // Calculamos el consumo de recursos en bajo consumo
+        double aguaConsumida = horasReposo * 0.5;
+        double oxigenoConsumido = horasReposo * 0.3;
+        double energiaConsumida = horasReposo * 4.0;
+
+        // Mostramos el procedimiento técnico
+        System.out.print("\n*************************************************************\n");
+        System.out.print("Procedimiento técnico:\n");
+        System.out.print("  1. Desconectar subsistemas no esenciales (laboratorio de geología, procesador de regolito y luces de tránsito).\n");
+        System.out.print("  2. Reducir la temperatura interna de los módulos comunes de 21°C a 14°C para conservar calor en el núcleo.\n");
+        System.out.print("  3. Poner la red de telemetría en estado de escucha pasiva a la espera de señales de la Tierra.\n");
+
+        // Mostramos el balance de recursos
+        System.out.print("\nBalance de recursos consumidos en bajo consumo:\n");
+        System.out.printf("  Agua: %.2f L\n", aguaConsumida);
+        System.out.printf("  Oxígeno: %.2f%%\n", oxigenoConsumido);
+        System.out.printf("  Energía: %.2f kWh\n", energiaConsumida);
+        System.out.println("*************************************************************\n");
         pausar(entrada);
     }
     // Fin Gestión de Modo Reposo
